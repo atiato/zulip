@@ -9,7 +9,7 @@ up-to-date list of all changes.
 
 ### Zulip Server 8.8
 
-_Released 2024-05-09_
+_Released 2024-06-09_
 
 - Notably improved the performance of several common API endpoints.
 - Fixed a regression in 8.3 which caused server errors when trying to view
