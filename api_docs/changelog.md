@@ -20,6 +20,8 @@ format used by the Zulip server that they are interacting with.
 
 ## Changes in Zulip 8.0
 
+Released 2024-06-09
+
 **Feature level 237**
 
 No changes; feature level used for Zulip 8.0 release.
