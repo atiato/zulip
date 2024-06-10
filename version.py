@@ -1,6 +1,6 @@
 import os
 
-ZULIP_VERSION = "8.8+git"
+ZULIP_VERSION = "8.8"
 
 # Add information on number of commits and commit hash to version, if available
 zulip_git_version_file = os.path.join(
