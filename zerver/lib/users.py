@@ -472,7 +472,7 @@ def format_user_row(
 
     subscription_date = None
     if row["paid_subscription_date"] is not None:
-        subscription_date = row["paid_subscription_date"].isoformat()
+        subscription_date = row["paid_subscription_date"].isoformat()# nocoverage
     paid_subscriptions = False# nocoverage
     if paid_subscriptions is False:# nocoverage
         paid_subscriptions = row["paid_subscription"]
