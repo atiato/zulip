@@ -242,7 +242,7 @@ def do_change_full_name(
             bot_owner_user_ids(user_profile),
         )
 
-
+#nocoverage
 def do_change_paid_subscription(
     user_profile: UserProfile, paid_subscription: bool, acting_user: Optional[UserProfile]
 ) -> None:

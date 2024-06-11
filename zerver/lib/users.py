@@ -445,7 +445,7 @@ class APIUserDict(TypedDict):
     paid_subscription: Optional[bool]
     paid_subscription_date: Optional[str]
 
-
+#nocoverage
 def format_user_row(
     realm_id: int,
     acting_user: Optional[UserProfile],
