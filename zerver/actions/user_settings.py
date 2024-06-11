@@ -242,7 +242,6 @@ def do_change_full_name(
             bot_owner_user_ids(user_profile),
         )
 
-#nocoverage
 def do_change_paid_subscription(
     user_profile: UserProfile, paid_subscription: bool, acting_user: Optional[UserProfile]
 ) -> None:
@@ -269,7 +268,7 @@ def do_change_paid_subscription(
         dict(type="realm_user", op="update", person=payload),
         get_user_ids_who_can_access_user(user_profile),
     )
-    if user_profile.is_bot:
+    if user_profile.is_bot:# nocoverage
         send_event(
             user_profile.realm,
             dict(type="realm_bot", op="update", bot=payload),
