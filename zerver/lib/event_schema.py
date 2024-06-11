@@ -1112,7 +1112,7 @@ realm_user_type = DictType(
         ("timezone", str),
         ("date_joined", str),
         ("delivery_email", OptionalType(str)),
-        ("paid_subscription_date", OptionalType(datetime)),
+        ("paid_subscription_date", OptionalType(str)),
         ("paid_subscription", bool),
     ]
 )

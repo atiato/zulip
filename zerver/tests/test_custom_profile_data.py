@@ -944,6 +944,8 @@ class ListCustomProfileFieldTest(CustomProfileFieldTestCase):
             "is_active",
             "date_joined",
             "profile_data",
+            "paid_subscription",
+            "paid_subscription_date",
         }
         self.assertEqual(set(iago_raw_data.keys()), expected_keys_for_iago)
         self.assertNotEqual(iago_raw_data["profile_data"], {})
@@ -966,6 +968,8 @@ class ListCustomProfileFieldTest(CustomProfileFieldTestCase):
             "date_joined",
             "bot_type",
             "bot_owner_id",
+            "paid_subscription",
+            "paid_subscription_date",
         }
         self.assertEqual(set(test_bot_raw_data.keys()), expected_keys_for_test_bot)
         self.assertEqual(test_bot_raw_data["bot_type"], 1)
@@ -1005,6 +1009,8 @@ class ListCustomProfileFieldTest(CustomProfileFieldTestCase):
             "is_active",
             "is_guest",
             "date_joined",
+            "paid_subscription",
+            "paid_subscription_date",
         }
 
         url = "/json/users/me"

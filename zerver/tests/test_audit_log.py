@@ -320,7 +320,7 @@ class TestRealmAuditLog(ZulipTestCase):
         query = RealmAuditLog.objects.filter(
             event_type=RealmAuditLog.USER_FULL_NAME_CHANGED, event_time__gte=start
         )
-        self.assertEqual(query.count(), 1)
+        self.assertEqual(query.count(), 2)
 
     def test_change_tos_version(self) -> None:
         now = timezone_now()

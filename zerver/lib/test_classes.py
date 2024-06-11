@@ -1979,7 +1979,6 @@ class ZulipTestCase(ZulipTestCaseMixin, TestCase):
             # this helper to make sure the `send_event` calls actually run.
             with self.captureOnCommitCallbacks(execute=True):
                 yield lst
-
         self.assert_length(lst, expected_num_events)
 
 

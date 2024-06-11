@@ -539,6 +539,8 @@ exports.fixtures = {
             timezone: "America/New_York",
             date_joined: "2020-01-01",
             delivery_email: "test-delivery@example.com",
+            paid_subscription: true,
+            paid_subscription_date: "",
         },
     },
 
@@ -560,6 +562,8 @@ exports.fixtures = {
             timezone: "America/New_York",
             date_joined: "2020-01-01",
             delivery_email: "test-delivery@example.com",
+            paid_subscription: true,
+            paid_subscription_date: "",
         },
     },
 

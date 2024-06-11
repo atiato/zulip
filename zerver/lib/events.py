@@ -512,6 +512,11 @@ def fetch_initial_state_data(
             or settings_user.can_create_public_streams()
             or settings_user.can_create_web_public_streams()
         )
+
+        subscription_date = None
+        if settings_user.paid_subscription_date is not None:
+            subscription_date = settings_user.paid_subscription_date.isoformat()
+
         state["can_create_web_public_streams"] = settings_user.can_create_web_public_streams()
         state["can_subscribe_other_users"] = settings_user.can_subscribe_other_users()
         state["can_invite_others_to_realm"] = settings_user.can_invite_users_by_email()
@@ -524,6 +529,8 @@ def fetch_initial_state_data(
         state["email"] = settings_user.email
         state["delivery_email"] = settings_user.delivery_email
         state["full_name"] = settings_user.full_name
+        state["paid_subscription"] = settings_user.paid_subscription
+        state["paid_subscription_date"] = settings_user.paid_subscription_date
 
     if want("realm_bot"):
         state["realm_bots"] = [] if user_profile is None else get_owned_bot_dicts(user_profile)

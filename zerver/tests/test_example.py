@@ -136,6 +136,8 @@ class TestFullStack(ZulipTestCase):
                 role=UserProfile.ROLE_MEMBER,
                 timezone="Etc/UTC",
                 user_id=cordelia.id,
+                paid_subscription=False,
+                paid_subscription_date=None,
             ),
         )
 

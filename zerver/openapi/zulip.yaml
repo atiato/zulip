@@ -8444,7 +8444,7 @@ paths:
                           A boolean indicating if the requesting user has
                           paid his subscription.
 
-                          **Changes**: New in Zulip 5.0 (feature level 73).
+                          **Changes**: New in Zulip 5.8 (feature level 300).
                       paid_subscription_date:
                         type: string
                         nullable: true
@@ -8452,7 +8452,7 @@ paths:
                           A string indicating if the requesting user has
                           a subscription payment date.
 
-                          **Changes**: New in Zulip 5.0 (feature level 73).
+                          **Changes**: New in Zulip 5.8 (feature level 300).
                         example: false
                       role:
                         type: integer
@@ -11274,6 +11274,8 @@ paths:
                             "is_active": true,
                             "email": "hamlet@zulip.com",
                             "delivery_email": null,
+                            "paid_subscription": false,
+                            "paid_subscription_date": null,
                           },
                       }
     patch:
@@ -11324,6 +11326,14 @@ paths:
                     role added in Zulip 4.0 (feature level 60).
                   type: integer
                   example: 400
+                paid_subscription:
+                  type: boolean
+                  description: |
+                    A boolean indicating if the requesting user has
+                    paid his subscription.
+
+                    **Changes**: New in Zulip 5.8 (feature level 300).
+                  example: true
                 profile_data:
                   description: |
                     A dictionary containing the to be updated custom profile field data for the user.
@@ -15668,15 +15678,17 @@ paths:
                       paid_subscription:
                         type: boolean
                         description: |
-                          Whether the member has paid his subscription.
+                          A boolean indicating if the requesting user has
+                          paid his subscription.
 
+                          **Changes**: New in Zulip 8.8 (feature level 300).
                       paid_subscription_date:
                         type: string
                         nullable: true
                         description: |
                           Whether the current member has a payment date for his subscription.
 
-                          **Changes**: New in Zulip 5.0 (feature level 73).
+                          **Changes**: New in Zulip 8.8 (feature level 300).
                       is_moderator:
                         type: boolean
                         description: |
