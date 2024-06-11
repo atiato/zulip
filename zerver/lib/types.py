@@ -315,6 +315,8 @@ class RawUserDict(TypedDict):
     bot_type: Optional[int]
     long_term_idle: bool
     email_address_visibility: int
+    paid_subscription: NotRequired[bool]
+    paid_subscription_date: Optional[datetime]
 
 
 class RemoteRealmDictValue(TypedDict):

@@ -442,8 +442,8 @@ class APIUserDict(TypedDict):
     profile_data: NotRequired[Optional[Dict[str, Any]]]
     is_system_bot: NotRequired[bool]
     max_message_id: NotRequired[int]
-    paid_subscription: bool
-    paid_subscription_date: str
+    paid_subscription: Optional[bool]
+    paid_subscription_date: Optional[str]
 
 
 def format_user_row(
@@ -471,6 +471,13 @@ def format_user_row(
     ):
         delivery_email = row["delivery_email"]
 
+    subscription_date = None
+    if row["paid_subscription_date"] is not None:
+        subscription_date = row["paid_subscription_date"].isoformat()
+    paid_subscriptions = False
+    if paid_subscriptions is False:
+        paid_subscriptions = row["paid_subscription"]
+
     result = APIUserDict(
         email=row["email"],
         user_id=row["id"],
@@ -484,8 +491,8 @@ def format_user_row(
         full_name=row["full_name"],
         timezone=canonicalize_timezone(row["timezone"]),
         is_active=row["is_active"],
-        paid_subscription=row["paid_subscription"],
-        paid_subscription_date=str(row["paid_subscription_date"]),
+        paid_subscription=paid_subscriptions,
+        paid_subscription_date=subscription_date,
         date_joined=row["date_joined"].isoformat(),
         delivery_email=delivery_email,
     )
@@ -498,7 +505,11 @@ def format_user_row(
         del result["timezone"]
         assert isinstance(result["date_joined"], str)
         result["date_joined"] = str(date_parser.parse(result["date_joined"]).date())
-
+        # paid subscription date
+    if row["paid_subscription_date"] is not None:
+        result["paid_subscription_date"] = str(
+            date_parser.parse(row["paid_subscription_date"].isoformat())
+        )
     # Zulip clients that support using `GET /avatar/{user_id}` as a
     # fallback if we didn't send an avatar URL in the user object pass
     # user_avatar_url_field_optional in client_capabilities.
@@ -871,6 +882,10 @@ def get_data_for_inaccessible_user(realm: Realm, user_id: int) -> APIUserDict:
     # We just set date_joined field to UNIX epoch.
     user_date_joined = timestamp_to_datetime(0)
 
+    if UserProfile.paid_subscription_date is not None:
+        user_paid_subscription = str(UserProfile.paid_subscription_date)
+    paid_subscriptions = bool(UserProfile.paid_subscription)
+
     user_dict = APIUserDict(
         email=fake_email,
         user_id=user_id,
@@ -888,8 +903,8 @@ def get_data_for_inaccessible_user(realm: Realm, user_id: int) -> APIUserDict:
         delivery_email=None,
         avatar_url=get_avatar_for_inaccessible_user(),
         profile_data={},
-        paid_subscription=UserProfile.paid_subscription,
-        paid_subscription_date=UserProfile.paid_subscription_date,
+        paid_subscription=paid_subscriptions,
+        paid_subscription_date=user_paid_subscription,
     )
     return user_dict
 

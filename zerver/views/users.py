@@ -22,9 +22,9 @@ from zerver.actions.custom_profile_fields import (
 from zerver.actions.user_settings import (
     check_change_bot_full_name,
     check_change_full_name,
+    check_change_paid_subscription,
     do_change_avatar_fields,
     do_regenerate_api_key,
-    check_change_paid_subscription,
 )
 from zerver.actions.users import (
     do_change_user_role,
@@ -211,7 +211,7 @@ def update_user_backend(
     request: HttpRequest,
     user_profile: UserProfile,
     user_id: int,
-    paid_subscription: Optional[bool] = REQ(default=None),
+    paid_subscription: Optional[bool] = REQ(default=False, json_validator=check_bool),
     full_name: Optional[str] = REQ(default=None),
     role: Optional[int] = REQ(
         default=None,
