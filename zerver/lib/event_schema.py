@@ -27,7 +27,6 @@
 # See check_delete_message and check_presence for examples of this
 # paradigm.
 
-import datetime
 from typing import Dict, List, Sequence, Set, Tuple, Union
 
 from zerver.lib.data_types import (
