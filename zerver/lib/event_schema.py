@@ -27,6 +27,7 @@
 # See check_delete_message and check_presence for examples of this
 # paradigm.
 
+import datetime
 from typing import Dict, List, Sequence, Set, Tuple, Union
 
 from zerver.lib.data_types import (
@@ -1111,6 +1112,8 @@ realm_user_type = DictType(
         ("timezone", str),
         ("date_joined", str),
         ("delivery_email", OptionalType(str)),
+        ("paid_subscription_date", OptionalType(datetime)),
+        ("paid_subscription", bool),
     ]
 )
 
