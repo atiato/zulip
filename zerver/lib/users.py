@@ -445,6 +445,7 @@ class APIUserDict(TypedDict):
     paid_subscription: Optional[bool]
     paid_subscription_date: Optional[str]
 
+
 def format_user_row(
     realm_id: int,
     acting_user: Optional[UserProfile],
@@ -472,9 +473,9 @@ def format_user_row(
 
     subscription_date = None
     if row["paid_subscription_date"] is not None:
-        subscription_date = row["paid_subscription_date"].isoformat()# nocoverage
-    paid_subscriptions = False# nocoverage
-    if paid_subscriptions is False:# nocoverage
+        subscription_date = row["paid_subscription_date"].isoformat()  # nocoverage
+    paid_subscriptions = False  # nocoverage
+    if paid_subscriptions is False:  # nocoverage
         paid_subscriptions = row["paid_subscription"]
 
     result = APIUserDict(
@@ -505,9 +506,9 @@ def format_user_row(
         assert isinstance(result["date_joined"], str)
         result["date_joined"] = str(date_parser.parse(result["date_joined"]).date())
         # paid subscription date
-    if row["paid_subscription_date"] is not None:# nocoverage
+    if row["paid_subscription_date"] is not None:  # nocoverage
         result["paid_subscription_date"] = str(
-            date_parser.parse(row["paid_subscription_date"].isoformat())# nocoverage
+            date_parser.parse(row["paid_subscription_date"].isoformat())  # nocoverage
         )
     # Zulip clients that support using `GET /avatar/{user_id}` as a
     # fallback if we didn't send an avatar URL in the user object pass
