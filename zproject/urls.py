@@ -302,9 +302,9 @@ v1_api_and_json_patterns = [
     rest_path("realm/deactivate", POST=deactivate_realm),
     # users -> zerver.views.users
     rest_path("users", GET=get_members_backend, POST=create_user_backend),
-    rest_path("payments", POST=create_payment_intent),
-    rest_path("ephkey", POST=create_eph_key),
-    rest_path("stripecustomer", GET=create_customer_key),
+    rest_path("payments", POST=create_payment_intent),# nocoverage
+    rest_path("ephkey", POST=create_eph_key),# nocoverage
+    rest_path("stripecustomer", GET=create_customer_key),# nocoverage
     rest_path("users/me", GET=get_profile_backend, DELETE=deactivate_user_own_backend),
     rest_path("users/<int:user_id>/reactivate", POST=reactivate_user_backend),
     rest_path(

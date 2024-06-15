@@ -11378,6 +11378,144 @@ paths:
                             "paid_subscription_date": null,
                           },
                       }
+    patch:
+        operationId: update-user
+        summary: Update a user
+        tags: ["users"]
+        x-requires-administrator: true
+        description: |
+          Administrative endpoint to update the details of another user in the organization.
+
+          Supports everything an administrator can do to edit details of another
+          user's account, including editing full name,
+          [role](/help/roles-and-permissions), and [custom profile
+          fields](/help/custom-profile-fields).
+        parameters:
+          - $ref: "#/components/parameters/UserId"
+        requestBody:
+          required: false
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  full_name:
+                    description: |
+                      The user's full name.
+
+                      **Changes**: Removed unnecessary JSON-encoding of this parameter in
+                      Zulip 5.0 (feature level 106).
+                    type: string
+                    example: NewName
+                  role:
+                    description: |
+                      New [role](/api/roles-and-permissions) for the user. Roles are encoded as:
+
+                      - Organization owner: 100
+                      - Organization administrator: 200
+                      - Organization moderator: 300
+                      - Member: 400
+                      - Guest: 600
+
+                      Only organization owners can add or remove the owner role.
+
+                      The owner role cannot be removed from the only organization owner.
+
+                      **Changes**: New in Zulip 3.0 (feature level 8), replacing the previous
+                      pair of `is_admin` and `is_guest` boolean parameters. Organization moderator
+                      role added in Zulip 4.0 (feature level 60).
+                    type: integer
+                    example: 400
+                  paid_subscription:
+                    type: boolean
+                    description: |
+                      A boolean indicating if the requesting user has
+                      paid his subscription.
+
+                      **Changes**: New in Zulip 5.8 (feature level 300).
+                    example: true
+                  profile_data:
+                    description: |
+                      A dictionary containing the to be updated custom profile field data for the user.
+                    type: array
+                    items:
+                      type: object
+                    example:
+                      [{"id": 4, "value": "0"}, {"id": 5, "value": "1909-04-05"}]
+              encoding:
+                role:
+                  contentType: application/json
+                profile_data:
+                  contentType: application/json
+
+        responses:
+          "200":
+            $ref: "#/components/responses/SimpleSuccess"
+
+          "400":
+            description: Bad request.
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: "#/components/schemas/CodedError"
+                    - example:
+                        {
+                          "result": "error",
+                          "msg": "Guests cannot be organization administrators",
+                          "code": "BAD_REQUEST",
+                        }
+                      description: |
+                        A typical unsuccessful JSON response:
+    delete:
+        operationId: deactivate-user
+        summary: Deactivate a user
+        tags: ["users"]
+        x-requires-administrator: true
+        description: |
+          [Deactivates a
+          user](https://zulip.com/help/deactivate-or-reactivate-a-user)
+          given their user ID.
+        parameters:
+          - $ref: "#/components/parameters/UserId"
+        requestBody:
+          required: false
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  deactivation_notification_comment:
+                    description: |
+                      If not `null`, requests that the deactivated user receive
+                      a notification email about their account deactivation.
+
+                      If not `""`, encodes custom text written by the administrator
+                      to be included in the notification email.
+
+                      **Changes**: New in Zulip 5.0 (feature level 135).
+                    type: string
+                    example: |
+                      Farewell!
+        responses:
+          "200":
+            $ref: "#/components/responses/SimpleSuccess"
+          "400":
+            description: Bad request.
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: "#/components/schemas/CodedError"
+                    - example:
+                        {
+                          "code": "BAD_REQUEST",
+                          "msg": "Cannot deactivate the only organization owner",
+                          "result": "error",
+                        }
+                      description: |
+                        An example JSON error response when attempting to deactivate the only
+                        organization owner in an organization:
   /stripecustomer:
     get:
       operationId: get-stripe-customer
@@ -11401,188 +11539,7 @@ paths:
               get stripe customer for the mobile app 
       responses:
         "200":
-          description: Success.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/JsonSuccessBase"
-                  - additionalProperties: false
-                    properties:
-                      result: {}
-                      msg: {}
-                      ignored_parameters_unsupported: {}
-                    example:
-                      {
-                        "result": "success",
-                        "msg": "",
-                        "id": "cus_QILRliIH7wLWVm",
-                        "object": "customer",
-                        "address": null,
-                        "balance": 0,
-                        "created": 1718412365,
-                        "currency": null,
-                        "default_source": null,
-                        "delinquent": false,
-                        "description": null,
-                        "discount": null,
-                        "email": null,
-                        "invoice_prefix": "A530C474",
-                        "invoice_settings": {
-                            "custom_fields": null,
-                            "default_payment_method": null,
-                            "footer": null,
-                            "rendering_options": null
-                        },
-                        "livemode": false,
-                        "metadata": {},
-                        "name": null,
-                        "next_invoice_sequence": 1,
-                        "phone": null,
-                        "preferred_locales": [],
-                        "shipping": null,
-                        "tax_exempt": "none",
-                        "test_clock": null
-                    }
-    patch:
-      operationId: update-user
-      summary: Update a user
-      tags: ["users"]
-      x-requires-administrator: true
-      description: |
-        Administrative endpoint to update the details of another user in the organization.
-
-        Supports everything an administrator can do to edit details of another
-        user's account, including editing full name,
-        [role](/help/roles-and-permissions), and [custom profile
-        fields](/help/custom-profile-fields).
-      parameters:
-        - $ref: "#/components/parameters/UserId"
-      requestBody:
-        required: false
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                full_name:
-                  description: |
-                    The user's full name.
-
-                    **Changes**: Removed unnecessary JSON-encoding of this parameter in
-                    Zulip 5.0 (feature level 106).
-                  type: string
-                  example: NewName
-                role:
-                  description: |
-                    New [role](/api/roles-and-permissions) for the user. Roles are encoded as:
-
-                    - Organization owner: 100
-                    - Organization administrator: 200
-                    - Organization moderator: 300
-                    - Member: 400
-                    - Guest: 600
-
-                    Only organization owners can add or remove the owner role.
-
-                    The owner role cannot be removed from the only organization owner.
-
-                    **Changes**: New in Zulip 3.0 (feature level 8), replacing the previous
-                    pair of `is_admin` and `is_guest` boolean parameters. Organization moderator
-                    role added in Zulip 4.0 (feature level 60).
-                  type: integer
-                  example: 400
-                paid_subscription:
-                  type: boolean
-                  description: |
-                    A boolean indicating if the requesting user has
-                    paid his subscription.
-
-                    **Changes**: New in Zulip 5.8 (feature level 300).
-                  example: true
-                profile_data:
-                  description: |
-                    A dictionary containing the to be updated custom profile field data for the user.
-                  type: array
-                  items:
-                    type: object
-                  example:
-                    [{"id": 4, "value": "0"}, {"id": 5, "value": "1909-04-05"}]
-            encoding:
-              role:
-                contentType: application/json
-              profile_data:
-                contentType: application/json
-
-      responses:
-        "200":
-          $ref: "#/components/responses/SimpleSuccess"
-
-        "400":
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/CodedError"
-                  - example:
-                      {
-                        "result": "error",
-                        "msg": "Guests cannot be organization administrators",
-                        "code": "BAD_REQUEST",
-                      }
-                    description: |
-                      A typical unsuccessful JSON response:
-
-    delete:
-      operationId: deactivate-user
-      summary: Deactivate a user
-      tags: ["users"]
-      x-requires-administrator: true
-      description: |
-        [Deactivates a
-        user](https://zulip.com/help/deactivate-or-reactivate-a-user)
-        given their user ID.
-      parameters:
-        - $ref: "#/components/parameters/UserId"
-      requestBody:
-        required: false
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                deactivation_notification_comment:
-                  description: |
-                    If not `null`, requests that the deactivated user receive
-                    a notification email about their account deactivation.
-
-                    If not `""`, encodes custom text written by the administrator
-                    to be included in the notification email.
-
-                    **Changes**: New in Zulip 5.0 (feature level 135).
-                  type: string
-                  example: |
-                    Farewell!
-      responses:
-        "200":
-          $ref: "#/components/responses/SimpleSuccess"
-        "400":
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/CodedError"
-                  - example:
-                      {
-                        "code": "BAD_REQUEST",
-                        "msg": "Cannot deactivate the only organization owner",
-                        "result": "error",
-                      }
-                    description: |
-                      An example JSON error response when attempting to deactivate the only
-                      organization owner in an organization:
+          $ref: "#/components/responses/SimpleSuccess"  
   /realm/linkifiers:
     get:
       operationId: get-linkifiers

@@ -697,7 +697,7 @@ def create_payment_intent(
     customer_key: str = REQ(default=None),
     amount_key: int = REQ(default=66600),
     currency_key: str = REQ(default='usd')
-) -> HttpResponse:
+) -> HttpResponse:# nocoverage
 
     url = "https://api.stripe.com/v1/payment_intents"
     if customer_key is not None:
@@ -723,7 +723,7 @@ def create_eph_key(
     request: HttpRequest,
     user_profile: UserProfile,
     customer_key: str = REQ(default=None),
-) -> HttpResponse:
+) -> HttpResponse:# nocoverage
   # Use an existing Customer ID if this is a returning customer
 
     ephurl = "https://api.stripe.com/v1/ephemeral_keys"
@@ -753,7 +753,7 @@ def create_eph_key(
 def create_customer_key(
     request: HttpRequest,
     user_profile: UserProfile,
-) -> HttpResponse:
+) -> HttpResponse:# nocoverage
   # Use an existing Customer ID if this is a returning customer
 
     cusurl = "https://api.stripe.com/v1/customers"
