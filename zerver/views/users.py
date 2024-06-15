@@ -1,6 +1,6 @@
 from email.headerregistry import Address
 from typing import Any, Dict, List, Mapping, Optional, Union
-
+import requests
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.files.uploadedfile import UploadedFile
@@ -101,6 +101,7 @@ from zerver.models.users import (
     get_user_profile_by_id_in_realm,
 )
 from zproject.backends import check_password_strength
+from zproject.config import get_secret
 
 
 def check_last_owner(user_profile: UserProfile) -> bool:
@@ -689,6 +690,84 @@ def get_members_backend(
 
     return json_success(request, data)
 
+@has_request_variables
+def create_payment_intent(
+    request: HttpRequest,
+    user_profile: UserProfile,
+    customer_key: str = REQ(default=None),
+) -> HttpResponse:
+
+    url = "https://api.stripe.com/v1/payment_intents"
+    if customer_key is not None:
+        payload = 'customer='+customer_key+'&amount=666000&currency=usd'
+    else:
+        payload = 'customer='+get_secret("default_customer_id")+'&amount=666000&currency=usd'
+    headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': 'Bearer '+get_secret("stripe_secret_key"),
+    'Stripe-Version':'2024-04-10'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    data = response.json()
+    print(response.json())
+
+    return json_success(request,data)
+
+@has_request_variables
+def create_eph_key(
+    request: HttpRequest,
+    user_profile: UserProfile,
+    customer_key: str = REQ(default=None),
+) -> HttpResponse:
+  # Use an existing Customer ID if this is a returning customer
+
+    ephurl = "https://api.stripe.com/v1/ephemeral_keys"
+
+    headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': 'Bearer '+get_secret("stripe_secret_key"),
+    'Stripe-Version':'2024-04-10'
+    }
+
+    if customer_key is not None:
+        ephpayload= 'customer='+customer_key
+    else:
+        ephpayload= 'customer='+get_secret("default_customer_id")
+
+
+
+    ephResponse = requests.request("POST", ephurl, headers=headers, data=ephpayload)
+
+
+    ephData = ephResponse.json()
+    print(ephResponse.json())
+
+    return json_success(request,ephData)
+
+@has_request_variables
+def create_customer_key(
+    request: HttpRequest,
+    user_profile: UserProfile,
+) -> HttpResponse:
+  # Use an existing Customer ID if this is a returning customer
+
+    cusurl = "https://api.stripe.com/v1/customers"
+
+    headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': 'Bearer '+get_secret("stripe_secret_key"),
+    'Stripe-Version':'2024-04-10'
+    }
+
+    cusResponse = requests.request("POST", cusurl, headers=headers, data="")
+
+
+    cusData = cusResponse.json()
+    print(cusResponse.json())
+
+    return json_success(request,cusData)
 
 @require_realm_admin
 @has_request_variables
