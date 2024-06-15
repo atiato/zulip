@@ -58,6 +58,9 @@
 #### Users
 
 * [Get all users](/api/get-users)
+* [Get stripe customer](/api/get-stripe-customer)
+* [Get stripe Ephermal key](/api/ephermal-key)
+* [Get stripe payment intent](/api/stripe-payment-intent)
 * [Get own user](/api/get-own-user)
 * [Get a user](/api/get-user)
 * [Get a user by email](/api/get-user-by-email)

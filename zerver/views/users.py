@@ -695,13 +695,16 @@ def create_payment_intent(
     request: HttpRequest,
     user_profile: UserProfile,
     customer_key: str = REQ(default=None),
+    amount_key: int = REQ(default=66600),
+    currency_key: str = REQ(default='usd')
 ) -> HttpResponse:
 
     url = "https://api.stripe.com/v1/payment_intents"
     if customer_key is not None:
-        payload = 'customer='+customer_key+'&amount=666000&currency=usd'
+        payload = 'customer='+customer_key+'&amount='+amount_key+'&currency='+currency_key
     else:
-        payload = 'customer='+get_secret("default_customer_id")+'&amount=666000&currency=usd'
+        payload = 'customer='+get_secret("default_customer_id")+'&amount='+amount_key+'&currency='+currency_key
+    print(payload)
     headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': 'Bearer '+get_secret("stripe_secret_key"),

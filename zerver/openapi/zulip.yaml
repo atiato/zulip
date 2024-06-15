@@ -8957,6 +8957,106 @@ paths:
                           }
                         description: |
                           An example JSON error response when the custom emoji is invalid:
+  /payments:
+    post:
+      operationId: stripe-payment-intent
+      summary: get payment intent
+      tags: ["users"]
+      description: |
+        **Changes**: In Zulip 8.8 (feature level 86), added support for
+      requestBody:
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                customer_key:
+                  type: string
+                  description: |
+                    The customer key from stripe create customer.
+
+                    **Changes**: New in Zulip 5.0 (feature level 86).
+                  example: cus_QILRliIH7wLWVm
+                amount_key:                  
+                  type: integer
+                  description: |
+                    The amount_key to be used for stripe create paymentlink.
+
+                    **Changes**: New in Zulip 5.0 (feature level 86).
+                  example: 66600
+                currency_key:                  
+                  type: string
+                  description: |
+                    The currency used for stripe payment.
+
+                    **Changes**: New in Zulip 5.0 (feature level 86).
+                  example: usd                                  
+            encoding:
+              away:
+                contentType: application/json
+      responses:
+        "200":
+          $ref: "#/components/responses/SimpleSuccess"          
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - allOf:
+                      - $ref: "#/components/schemas/CodedError"
+                      - example:
+                          {
+                            "result": "error",
+                            "msg": "Client did not pass any new values.",
+                            "code": "BAD_REQUEST",
+                          }
+                        description: |
+                          An example JSON error response when no changes were requested:
+  /ephkey:
+    post:
+      operationId: ephermal-key
+      summary: gen ephermal key
+      tags: ["users"]
+      description: |
+        **Changes**: In Zulip 8.8 (feature level 86), added support for
+      requestBody:
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                customer_key:
+                  type: string
+                  description: |
+                    The generated customer key from stripe create customer.
+
+                    **Changes**: New in Zulip 5.0 (feature level 86).
+                  example: cus_QILRliIH7wLWVm                
+            encoding:
+              away:
+                contentType: application/json
+      responses:
+        "200":
+          $ref: "#/components/responses/SimpleSuccess"
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - allOf:
+                      - $ref: "#/components/schemas/CodedError"
+                      - example:
+                          {
+                            "result": "error",
+                            "msg": "Client did not pass any new values.",
+                            "code": "BAD_REQUEST",
+                          }
+                        description: |
+                          An example JSON error response when no changes were requested:
   /users/me/{stream_id}/topics:
     get:
       operationId: get-stream-topics
@@ -11278,6 +11378,72 @@ paths:
                             "paid_subscription_date": null,
                           },
                       }
+  /stripecustomer:
+    get:
+      operationId: get-stripe-customer
+      summary: get a customer
+      tags: ["users"]
+      description: |
+        create stripe customer 
+
+        **Changes**: New in Zulip 3.0 (feature level 1).
+      x-curl-examples-parameters:
+        oneOf:
+          - type: include
+            parameters:
+              enum:
+                - ""
+          - type: exclude
+            parameters:
+              enum:
+                - ""
+            description: |
+              get stripe customer for the mobile app 
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/JsonSuccessBase"
+                  - additionalProperties: false
+                    properties:
+                      result: {}
+                      msg: {}
+                      ignored_parameters_unsupported: {}
+                    example:
+                      {
+                        "result": "success",
+                        "msg": "",
+                        "id": "cus_QILRliIH7wLWVm",
+                        "object": "customer",
+                        "address": null,
+                        "balance": 0,
+                        "created": 1718412365,
+                        "currency": null,
+                        "default_source": null,
+                        "delinquent": false,
+                        "description": null,
+                        "discount": null,
+                        "email": null,
+                        "invoice_prefix": "A530C474",
+                        "invoice_settings": {
+                            "custom_fields": null,
+                            "default_payment_method": null,
+                            "footer": null,
+                            "rendering_options": null
+                        },
+                        "livemode": false,
+                        "metadata": {},
+                        "name": null,
+                        "next_invoice_sequence": 1,
+                        "phone": null,
+                        "preferred_locales": [],
+                        "shipping": null,
+                        "tax_exempt": "none",
+                        "test_clock": null
+                    }
     patch:
       operationId: update-user
       summary: Update a user
